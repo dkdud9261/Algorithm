@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class MyLibrary {
 
     static boolean[] visited;
@@ -28,13 +30,27 @@ public class MyLibrary {
         }
     }
 
-    // 조합
+    // 조합 - 문자열
     public static void combination(String str, String sub, int start, int n, int r) {
         if(r == n) {
             System.out.println(sub);
             return;
         }
         for(int i = start; i < n; i++) combination(str, sub+str.charAt(i), i+1, n, r+1);
+    }
+
+    // 조합 - 배열
+    public static void combination1(int[] arr, int start, int r) {
+        if(r == 0) {
+            for(int i = 0; i < arr.length; i++) {
+                if(visited[i]) System.out.print(arr[i] + " ");
+            }
+        }
+        for(int i = start; i < arr.length; i++) {
+            visited[i] = true;
+            combination1(arr, i+1, r-1);
+            visited[i] = false;
+        }
     }
 
     // 순열
