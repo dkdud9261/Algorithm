@@ -79,6 +79,18 @@ public class MyLibrary {
         return true;
     }
 
+    // 최대공약수
+    // a가 큰거
+    static int GCD(int a, int b) {
+        if(a % b == 0) return b;
+        return GCD(b, a % b);
+    }
+
+    // 최소공배수
+    static int LCM(int a, int b) {
+        return a * b / GCD(a,b);
+    }
+
     public static void main(String[] args) {
         visited = new boolean[4];
         combination("1234", "", 0, 4, 2);
