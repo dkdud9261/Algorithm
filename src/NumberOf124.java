@@ -1,20 +1,34 @@
+import java.util.Stack;
+
 public class NumberOf124 {
 
     public static String solution(int n) {
         String answer = "";
-        System.out.print(n + " : ");
-        String[] number = {"4","1","2","4"};
-//        if(n <= 3) return number[n%3];
-//        else if(n == 4) return "11";
-//        n--;
+        Stack<Integer> stack = new Stack<>();
+        boolean zero = false;
         while(n > 0) {
-            answer += number[n%3];
+            int r = n%3;
+            if(!zero) {
+                if(r == 0) {
+                    stack.push(4);
+                    zero = true;
+                }
+                else stack.push(r);
+            }
+            else {
+                switch (r) {
+                    case 0: stack.push(2);break;
+                    case 1: stack.push(4);break;
+                    default:{
+                        zero = false;
+                        stack.push(r-1);
+                    }
+                }
+            }
             n /= 3;
         }
-//        answer += ((n+2)%3);
-        StringBuilder sb = new StringBuilder(answer);
-        answer = sb.reverse().toString();
-        System.out.println(answer);
+        while(!stack.isEmpty()) answer += stack.pop();
+        if(answer.startsWith("4")) answer = answer.substring(1);
         return answer;
     }
 
