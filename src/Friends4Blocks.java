@@ -1,8 +1,10 @@
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 public class Friends4Blocks {
     static boolean[][] visited;
-    static LinkedList<Block> remove;
+    static HashSet<Block> remove;
 
     static class Block {
         int i, j;
@@ -10,31 +12,42 @@ public class Friends4Blocks {
             this.i = i;
             this.j = j;
         }
+
+        @Override
+        public boolean equals(Object a) {
+            Block obj = (Block) a;
+            return (obj.i == this.i && obj.j == this.j);
+        }
+
+        @Override
+        public int hashCode() {
+            return (i+""+ j).hashCode();
+        }
     }
 
-    public static String[] rearrange(int m, int n, String[] board) {
+    public static char[][] rearrange(int m, int n, char[][] board) {
         int i, j;
 
         for(Block b : remove) {
             i = b.i;
             j = b.j;
-            myBoard[i][j] = '-';
+            board[i][j] = '-';
         }
-        int level = -1;
         for(int c = 0; c < n; c++) {
+            int level = -1;
             for (int r = m-1; r >= 0; r--) {
-                if (board[r].charAt(c) == '-') {
+                if (board[r][c] == '-') {
                     if(level == -1) level = r;
                 }
-                if (level != -1 && myBoard[r][c] != '-') {
-                    myBoard[level][c] = myBoard[r][c];
-                    myBoard[r][c] = '-';
+                if (level != -1 && board[r][c] != '-') {
+                    board[level][c] = board[r][c];
+                    board[r][c] = '-';
                     level--;
                 }
             }
         }
 
-        for()
+        return board;
     }
 
     public static void search(int m, int n, char[][] board, int i, int j) {
@@ -46,7 +59,7 @@ public class Friends4Blocks {
         for(int k = 0; k < 3; k++) {
             int nr = i + dr[k];
             int nc = j + dc[k];
-            if(board[i].charAt(j) == board[nr].charAt(nc)) {
+            if(board[i][j] == board[nr][nc]) {
                 cnt++;
                 if (!visited[nr][nc] && nr < m - 1 && nc < n - 1) {
                     search(m, n, board, nr, nc);
@@ -64,17 +77,28 @@ public class Friends4Blocks {
     public static int solution(int m, int n, String[] board) {
         int answer = 0;
         visited = new boolean[m][n];
-        remove = new LinkedList<>();
+        remove = new HashSet<>();
         char[][] myBoard = new char[m][n];
         for(int r = 0; r < m; r++) {
             String[] split = board[r].split("");
             for(int c = 0; c < n; c++) myBoard[r][c] = split[c].charAt(0);
         }
-        for(int i = 0; i < m-1; i++) {
-            for(int j = 0; j < n-1; j++) {
-                if(!visited[i][j]) search(m, n, myBoard, i, j);
+
+        int temp;
+        while(true) {
+            temp = answer;
+            for (int i = 0; i < m - 1; i++) {
+                for (int j = 0; j < n - 1; j++) {
+                    if (!visited[i][j] && myBoard[i][j] != '-') search(m, n, myBoard, i, j);
+                }
             }
+            rearrange(m, n, myBoard);
+            answer += remove.size();
+            if(temp == answer) break;
+            remove.clear();
+            visited = new boolean[m][n];
         }
+        System.out.println(answer);
 
         return answer;
     }
