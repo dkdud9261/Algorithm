@@ -30,18 +30,19 @@ public class EditChart {
                     int selected = chart.get(k);
                     int re = stack.pop();
                     int i;
-                    for (i = 0; i < chart.size(); i++) {
-                        if (chart.get(i) > re) break;
+                    for(i = re-1; !chart.contains(i) && i >= 0; i--);
+                    if(i < 0) {
+                        chart.add(0, re);
+                        k++;
                     }
-                    chart.add(i, re);
-                    if (chart.get(k) != selected) {
-                        for (i = 0; i < chart.size(); i++) {
-                            if (chart.get(i) == selected) break;
-                        }
-                        k = i;
+                    else {
+                        chart.add(chart.indexOf(i)+1, re);
+                        if(selected > chart.get(k)) k++;
                     }
+                    break;
                 }
             }
+            System.out.println(chart + " ==> " + k + " " + stack);
         }
         boolean[] check = new boolean[n];
         for(int i : chart) check[i] = true;
@@ -64,7 +65,6 @@ public class EditChart {
                 case 'D': {
                     int i = c.indexOf(" ");
                     cnt = Integer.parseInt(c.substring(i+1));
-                    int temp = cnt;
                     for(; cnt > 0; k++) {
                         if(chart[k]) cnt--;
                     }
@@ -94,7 +94,7 @@ public class EditChart {
                     break;
                 }
             }
-//            System.out.println(Arrays.toString(chart) + " ==> " + k + " " + stack);
+            System.out.println(Arrays.toString(chart) + " ==> " + k + " " + stack);
         }
 
         for(boolean b : chart) {
@@ -107,6 +107,6 @@ public class EditChart {
     }
 
     public static void main(String[] args) {
-        solution(8, 2, new String[]{"D 2","C","U 3","C","D 4","C","U 2","Z","Z","U 1","C"});
+        solution1(8, 2, new String[]{"D 2","C","U 3","C","D 4","C","U 2","Z","Z","U 1","C"});
     }
 }
