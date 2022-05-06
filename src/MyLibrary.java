@@ -18,20 +18,21 @@ public class MyLibrary {
     }
 
     // 조합 - 배열
-    public static void combination1(int[] arr, int start, int r) {
+    public static void combination1(int[] arr, int start, int r, boolean[] visited) {
         if(r == 0) {
             for(int i = 0; i < arr.length; i++) {
                 if(visited[i]) System.out.print(arr[i] + " ");
+                System.out.println();
             }
         }
         for(int i = start; i < arr.length; i++) {
             visited[i] = true;
-            combination1(arr, i+1, r-1);
+            combination1(arr, i+1, r-1, visited);
             visited[i] = false;
         }
     }
 
-    // 순열
+    // 순열 - 문자열
     // visited 필요
     public static void permutation(String str, String sub, int n, int r) {
         if(r == n) {
@@ -42,6 +43,22 @@ public class MyLibrary {
             if(!visited[i]) {
                 visited[i] = true;
                 permutation(str, sub + str.charAt(i), n, r+1);
+                visited[i] = false;
+            }
+        }
+    }
+
+    // 순열 - 배열
+    public static void permutation(int[] arr, int[] sub, int n, int r, boolean[] visited) {
+        if(r == n) {
+            System.out.println(Arrays.toString(sub));
+            return;
+        }
+        for(int i = 0; i < n; i++) {
+            if(!visited[i]) {
+                visited[i] = true;
+                sub[r] = arr[i];
+                permutation(arr, sub, n, r+1, visited);
                 visited[i] = false;
             }
         }
