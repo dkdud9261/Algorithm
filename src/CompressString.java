@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 public class CompressString {
 
-    public static int solution(String s) {
+    /*public static int solution(String s) {
         int answer = 0;
         answer = s.length();
         String[] sub_str = new String[s.length()];
@@ -32,16 +32,41 @@ public class CompressString {
         }
 
         return answer;
+    }*/
+
+    public static int solution(String s) {
+        int answer = 0;
+        int len = s.length();
+        int min = len;
+        for(int l = len/2; l >= 1; l--) {
+            StringBuilder sb1 = new StringBuilder();
+            int i;
+            for(i = 0; i+l <= len;) { // 단위 시작 인덱스
+                StringBuilder sb = new StringBuilder();
+                for(int j = i; j < i+l; j++) sb.append(s.charAt(j));
+                String sub = sb.toString(); // 단위
+                int cnt = 1;
+                int j;
+                for(j = i+l; j+l <= len; j+=l) {
+                    if(s.substring(j, j+l).equals(sub)) cnt++;
+                    else break;
+                }
+                if(cnt > 1) sb1.append(cnt);
+                sb1.append(sub);
+                i = j;
+            }
+            if(i < len) sb1.append(s.substring(i));
+            min = Math.min(min, sb1.length());
+        }
+        answer = min;
+        return answer;
     }
 
     public static void main(String[] args) {
-//        System.out.println(solution("aabbaccc") + "\n");
-//        System.out.println(solution("ababcdcdababcdcd") + "\n");
-        System.out.println(solution("abcabcdede") + "\n");
-//        System.out.println(solution("abcabcabcabcdededededede") + "\n");
-//        System.out.println(solution("xababcdcdababcdcd") + "\n");
-//        System.out.println(solution("ababa") + "\n");
-//        System.out.println(solution("") + "\n");
-        System.out.println(solution("aaaaaaaaaabbbbbbbbbb") + "\n");
+        solution("aabbaccc");
+        solution("ababcdcdababcdcd");
+        solution("abcabcdede");
+        solution("abcabcabcabcdededededede");
+        solution("xababcdcdababcdcd");    // 문제
     }
 }
