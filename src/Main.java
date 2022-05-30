@@ -1,87 +1,65 @@
-import java.io.*;
+// 치킨 배달(15686)
+
 import java.util.*;
+import java.io.*;
 
 public class Main {
 
-    public static void main1(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        int N = Integer.parseInt(br.readLine());
-        PriorityQueue<Integer> pq1 = new PriorityQueue<>(Collections.reverseOrder());
-        PriorityQueue<Integer> pq2 = new PriorityQueue<>();
-        pq1.add(Integer.parseInt(br.readLine()));
-        bw.write(String.valueOf(pq1.peek()));
-        bw.newLine();
-        int mid = pq1.peek();
-        for(int i = 2; i <= N; i++) {
-            int number = Integer.parseInt(br.readLine());
-            if(number > mid) {
-                if(pq1.size() == pq2.size()) pq1.add(pq2.remove());
-                pq2.add(number);
-            }
-            else if(number == mid) {
-                if(pq1.size() > pq2.size()) pq2.add(number);
-                else pq1.add(number);
-            }
-            else {
-                if(pq1.size() > pq2.size()) pq2.add(pq1.remove());
-                pq1.add(number);
-            }
-            mid = Math.min(pq1.peek(), pq2.peek());
-            bw.write(String.valueOf(mid));
-            bw.newLine();
+    static class Pos {
+        int r, c;
+        public Pos(int r, int c) {
+            this.r = r;
+            this.c = c;
         }
-        bw.flush();
     }
 
-    static class Pair implements Comparable<Pair> {
-        int ranking1, ranking2;
-        int id;
-        public Pair(int ranking1, int ranking2, int id) {
-            this.ranking1 = ranking1;
-            this.ranking2 = ranking2;
-            this.id = id;
+    static class Dist implements Comparable<Dist> {
+        Pos house, chicken;
+        int dist;
+
+        public Dist(Pos house, Pos chicken) {
+            this.house = house;
+            this.chicken = chicken;
+            this.dist = Math.abs(house.r-chicken.r) + Math.abs(house.c-chicken.c);
         }
 
         @Override
-        public int compareTo(Pair o) {
-            return Integer.compare(this.ranking1, o.ranking1);
+        public int compareTo(Dist o) {
+            if(this.dist == o.dist) return Integer.compare(this.chicken.r, o.chicken.r);
+            return Integer.compare(this.dist, o.dist);
         }
     }
-    // 1946 신입사원
-    public static void main(String[] args) throws IOException {
+
+    // 집(A개) 리스트, 치킨집(B개) 리스트
+    // 각 집마다 각 치킨집까지의 거리를 가까운순으로 PriorityQueue<>[]
+    // 치킨집을 M개씩 선택해서 치킨거리 구하고 최솟값 구하기
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        int T = Integer.parseInt(br.readLine());
-        for(int i = 0; i < T; i++) {
-            int N = Integer.parseInt(br.readLine());
-            PriorityQueue<Pair> pq1 = new PriorityQueue<>();
-            PriorityQueue<Pair> pq2 = new PriorityQueue<>();
-            for(int j = 0; j < N; j++) {
-                StringTokenizer st = new StringTokenizer(br.readLine());
-                int s1 = Integer.parseInt(st.nextToken());
-                int s2 = Integer.parseInt(st.nextToken());
-                pq1.add(new Pair(s1, s2, j));
-                pq2.add(new Pair(s2, s1, j));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        ArrayList<Pos> house = new ArrayList<>();
+        ArrayList<Pos> chicken = new ArrayList<>();
+        for(int i = 1; i <= N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for(int j = 1; j <= N; j++) {
+                int n = Integer.parseInt(st.nextToken());
+                if(n == 1) house.add(new Pos(i, j));
+                else if(n == 2) chicken.add(new Pos(i,j));
             }
-            boolean[] fail = new boolean[N]; // true면 탈락 false면 통과
-            int cutline1 = pq1.remove().ranking2;
-            int cutline2 = pq2.remove().ranking2;
-            for(int j = 1; j < N; j++) {
-                Pair applicant1 = pq1.remove();
-                if(applicant1.ranking2 > cutline1) fail[applicant1.id] = true;
-                else cutline1 = applicant1.ranking2;
-                Pair applicant2 = pq2.remove();
-                if(applicant2.ranking2 > cutline2) fail[applicant2.id] = true;
-                else cutline2 = applicant2.ranking2;
-            }
-            int pass = 0;
-            for(int j = 0; j < N; j++) {
-                if(!fail[j]) pass++;
-            }
-            bw.write(String.valueOf(pass));
-            bw.newLine();
         }
-        bw.flush();
+        PriorityQueue[] pq = new PriorityQueue[house.size()];
+        int[][] chickenDist = new int[house.size()][chicken.size()];
+        for(int i = 0; i < house.size(); i++) {
+            pq[i] = new PriorityQueue<Dist>();
+            for(int j = 0; j < chicken.size(); j++) {
+                Dist dist = new Dist(house.get(i), chicken.get(j));
+                pq[i].add(dist);
+                chickenDist[i][j] = dist.dist;
+            }
+        }
+        int a = 'a';
+
     }
 }
