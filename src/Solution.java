@@ -30,10 +30,7 @@ class Solution
 
     public static void main(String[] args) {
         solution("baabaa");
-        Queue<Character> queue = new LinkedList<>();
-        queue.add('a');
-        queue.add('b');
-        queue.add('c');
-        Character[] list = queue.toArray(new Character[0]);
+        HashMap<String, String> map = new HashMap<>();
+        String[] keys = map.keySet().toArray(new String[0]);
     }
 }
