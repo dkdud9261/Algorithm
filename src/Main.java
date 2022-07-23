@@ -1,11 +1,10 @@
-// 치킨 배달(15686)
-
 import java.util.*;
 import java.io.*;
 
 public class Main {
 
-    static class Pos {
+    // 치킨 배달(15686)
+    /*static class Pos {
         int r, c;
         public Pos(int r, int c) {
             this.r = r;
@@ -61,5 +60,45 @@ public class Main {
         }
         int a = 'a';
 
-    }
+    }*/
+
+    // 설탕 배달
+    /*public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        int five = N/5;     // 3
+        int rest = N%5;     // 3
+        if(rest == 0) System.out.println(five);
+        else {
+            while(five >= 0) {
+                if(rest % 3 == 0) {
+                    int three = rest / 3;
+                    System.out.println((five + three));
+                    break;
+                }
+                five--;
+                rest += 5;
+            }
+            if(five < 0)System.out.println(-1);
+        }
+    }*/
+
+    // ATM
+    /*public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        Integer[] arr = new Integer[N];
+        for(int i = 0; i < N; i++) arr[i] = Integer.parseInt(st.nextToken());
+        Arrays.sort(arr);
+        int[] sum = new int[N];
+        sum[0] = arr[0];
+        if(N > 1) {
+            for(int i = 1; i < N; i++) sum[i] = sum[i-1] + arr[i];
+        }
+        int answer = 0;
+        for(int s : sum) answer += s;
+        System.out.println(answer);
+    }*/
+
 }
